@@ -17,6 +17,7 @@ import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import { NavLink } from "react-router-dom";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import CategoryIcon from "@mui/icons-material/Category";
 
 const CustomizeListItem = ({ to, icon, text, sx = {} }) => (
   <NavLink
@@ -68,6 +69,11 @@ export default function Sidebar() {
           to={"inventory"}
           icon={<InventoryIcon />}
           text={"Quản lý tồn kho"}
+        />
+        <CustomizeListItem
+          to={"categories"}
+          icon={<CategoryIcon />}
+          text={"Quản lý danh mục"}
         />
 
         <ListItemButton onClick={handleClickPartner}>

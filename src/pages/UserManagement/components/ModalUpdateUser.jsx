@@ -62,7 +62,6 @@ export default function ModalUpdateUser({
     formState: { errors },
   } = useForm({ mode: "onChange", defaultValues: { role: "" } });
   const handleOnSubmit = async (dataSubmit) => {
-    console.log(dataSubmit);
     try {
       const res = await updateUser(user.id, dataSubmit);
       toast.success(res.data?.message);
