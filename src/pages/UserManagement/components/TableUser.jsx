@@ -10,7 +10,16 @@ import Paper from "@mui/material/Paper";
 import CreateIcon from "@mui/icons-material/Create";
 import LockIcon from "@mui/icons-material/Lock";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { ROLE } from "../../../constant/role";
 import { deleteUser, lockUser, unlockUser } from "../../../apis/userService";
 import { ToastContext } from "../../../contexts/toastProvider";
@@ -41,12 +50,15 @@ export default function TableUsers({ data, setPage, fetchData }) {
   const { toast } = React.useContext(ToastContext);
   const [openModalUpdate, setOpenModalUpdate] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState(null);
+  const [openConfirmModalDelete, setOpenConfirmModalDelete] =
+    React.useState(false);
+  const [openConfirmModalLock, setOpenConfirmModalLock] = React.useState(false);
 
   const handleOnClickUpdate = (user) => {
     setSelectedUser(user);
     setOpenModalUpdate(true);
   };
-  const handleClickLock = async (id) => {
+  const handleConfirmLock = async (id) => {
     try {
       const res = await lockUser(id);
       toast.success(res.data?.message);
@@ -54,6 +66,8 @@ export default function TableUsers({ data, setPage, fetchData }) {
       fetchData();
     } catch (error) {
       toast.error(error.response?.data?.message);
+    } finally {
+      setOpenConfirmModalLock(false);
     }
   };
   const handleClickUnLock = async (id) => {
@@ -66,15 +80,28 @@ export default function TableUsers({ data, setPage, fetchData }) {
       toast.error(error.response?.data?.message);
     }
   };
-  const handleClickDelete = async (id) => {
+  const handleConfirmDelete = async (id) => {
     try {
       const res = await deleteUser(id);
+      setOpenConfirmModalDelete(false);
       toast.success(res.data?.message);
       setPage(1);
       fetchData();
     } catch (error) {
       toast.error(error.response?.data?.message);
+    } finally {
+      setOpenConfirmModalDelete(false);
     }
+  };
+
+  const handleClickDelete = (user) => {
+    setSelectedUser(user);
+    setOpenConfirmModalDelete(true);
+  };
+
+  const handleClickLock = (user) => {
+    setSelectedUser(user);
+    setOpenConfirmModalLock(true);
   };
   return (
     <TableContainer component={Paper}>
@@ -126,13 +153,54 @@ export default function TableUsers({ data, setPage, fetchData }) {
                     <CreateIcon sx={{ fontSize: "20px" }} />
                   </Box>
                 </Tooltip>
-                {row.isBlock ? (
-                  <Tooltip title="Mở khóa" placement="top-start">
+                {row.isBlock
+                  ? row.role?.name !== "ADMIN" && (
+                      <Tooltip title="Mở khóa" placement="top-start">
+                        <Box
+                          component={"span"}
+                          sx={{
+                            bgcolor: "#FFE59D",
+                            color: "#FEBB05",
+                            borderRadius: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            p: "4px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleClickUnLock(row.id)}
+                        >
+                          <LockOpenIcon sx={{ fontSize: "20px" }} />
+                        </Box>
+                      </Tooltip>
+                    )
+                  : row.role?.name !== "ADMIN" && (
+                      <Tooltip title="Khóa" placement="top-start">
+                        <Box
+                          component={"span"}
+                          sx={{
+                            bgcolor: "#FFE59D",
+                            color: "#FEBB05",
+                            borderRadius: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            p: "4px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleClickLock(row)}
+                        >
+                          <LockIcon sx={{ fontSize: "20px" }} />
+                        </Box>
+                      </Tooltip>
+                    )}
+                {row.role?.name !== "ADMIN" && (
+                  <Tooltip title="Xóa" placement="top-start">
                     <Box
                       component={"span"}
                       sx={{
-                        bgcolor: "#FFE59D",
-                        color: "#FEBB05",
+                        bgcolor: "#F7BAAD",
+                        color: "#FF5634",
                         borderRadius: "5px",
                         display: "flex",
                         justifyContent: "center",
@@ -140,49 +208,12 @@ export default function TableUsers({ data, setPage, fetchData }) {
                         p: "4px",
                         cursor: "pointer",
                       }}
-                      onClick={() => handleClickUnLock(row.id)}
+                      onClick={() => handleClickDelete(row)}
                     >
-                      <LockOpenIcon sx={{ fontSize: "20px" }} />
-                    </Box>
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="Khóa" placement="top-start">
-                    <Box
-                      component={"span"}
-                      sx={{
-                        bgcolor: "#FFE59D",
-                        color: "#FEBB05",
-                        borderRadius: "5px",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        p: "4px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => handleClickLock(row.id)}
-                    >
-                      <LockIcon sx={{ fontSize: "20px" }} />
+                      <DeleteIcon sx={{ fontSize: "20px" }} />
                     </Box>
                   </Tooltip>
                 )}
-                <Tooltip title="Xóa" placement="top-start">
-                  <Box
-                    component={"span"}
-                    sx={{
-                      bgcolor: "#F7BAAD",
-                      color: "#FF5634",
-                      borderRadius: "5px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      p: "4px",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => handleClickDelete(row.id)}
-                  >
-                    <DeleteIcon sx={{ fontSize: "20px" }} />
-                  </Box>
-                </Tooltip>
               </StyledTableCell>
             </StyledTableRow>
           ))}
@@ -195,6 +226,62 @@ export default function TableUsers({ data, setPage, fetchData }) {
         fetchData={fetchData}
         user={selectedUser}
       />
+
+      {/* confirm delete modal */}
+      <Dialog
+        open={openConfirmModalDelete}
+        onClose={(event, reason) => {
+          // chặn đóng khi click ra ngoài hoặc nhấn ESC
+          if (reason === "backdropClick" || reason === "escapeKeyDown") {
+            return;
+          }
+          setOpenConfirmModalDelete(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`Bạn có chắc muốn xóa người dùng có username: ${selectedUser?.username}?`}
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            Bạn sẽ không thể khôi phục dữ liệu sau khi xóa.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirmModalDelete(false)}>Hủy</Button>
+          <Button
+            onClick={() => handleConfirmDelete(selectedUser.id)}
+            autoFocus
+          >
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* confirm lock modal */}
+      <Dialog
+        open={openConfirmModalLock}
+        onClose={(event, reason) => {
+          // chặn đóng khi click ra ngoài hoặc nhấn ESC
+          if (reason === "backdropClick" || reason === "escapeKeyDown") {
+            return;
+          }
+          setOpenConfirmModalLock(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`Bạn có chắc muốn khóa người dùng có username: ${selectedUser?.username}?`}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirmModalLock(false)}>Hủy</Button>
+          <Button onClick={() => handleConfirmLock(selectedUser.id)} autoFocus>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
     </TableContainer>
   );
 }

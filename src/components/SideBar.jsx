@@ -18,6 +18,8 @@ import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
 import { NavLink } from "react-router-dom";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import StoreIcon from "@mui/icons-material/Store";
 
 const CustomizeListItem = ({ to, icon, text, sx = {} }) => (
   <NavLink
@@ -35,8 +37,9 @@ const CustomizeListItem = ({ to, icon, text, sx = {} }) => (
   </NavLink>
 );
 export default function Sidebar() {
-  const [openPartner, setOpenPartner] = React.useState(true);
-  const [openOrder, setOpenOrder] = React.useState(true);
+  const [openPartner, setOpenPartner] = React.useState(false);
+  const [openOrder, setOpenOrder] = React.useState(false);
+  const [openSetup, setOpenSetup] = React.useState(false);
 
   const handleClickPartner = () => {
     setOpenPartner(!openPartner);
@@ -44,6 +47,9 @@ export default function Sidebar() {
 
   const handleClickOrder = () => {
     setOpenOrder(!openOrder);
+  };
+  const handleClickSetup = () => {
+    setOpenSetup(!openSetup);
   };
   return (
     <Box
@@ -127,6 +133,31 @@ export default function Sidebar() {
             />
           </List>
         </Collapse>
+        {/* 
+        <ListItemButton onClick={handleClickSetup}>
+          <ListItemIcon>
+            <SettingsSuggestIcon />
+          </ListItemIcon>
+          <ListItemText primary="Thiết lập" />
+          {openSetup ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+
+        <Collapse in={openSetup} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <CustomizeListItem
+              to={"warehouse"}
+              text={"Kho hàng"}
+              icon={<StoreIcon />}
+              sx={{ pl: 4 }}
+            />
+          </List>
+        </Collapse> */}
+
+        <CustomizeListItem
+          to={"setup"}
+          icon={<SettingsSuggestIcon />}
+          text={"Thiết lập hệ thống"}
+        />
       </List>
     </Box>
   );

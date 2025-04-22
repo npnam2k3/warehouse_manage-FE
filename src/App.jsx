@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPasswordPage from "./pages/Auth/ResetPasswordPage";
 import Dashboard from "./pages/DashBoard/DashBoard";
 import CategoriesPage from "./pages/Categories/CategoriesPage";
+import SetupPage from "./pages/Setup/SetupPage";
 
 function App() {
   const theme = createTheme({
@@ -56,6 +57,7 @@ function App() {
                   />
 
                   <Route path="inventory" element={<UserPage />} />
+                  <Route path="setup" element={<SetupPage />} />
                   <Route path="customers" element={<UserPage />} />
                   <Route path="suppliers" element={<UserPage />} />
                   <Route path="import-order" element={<UserPage />} />
