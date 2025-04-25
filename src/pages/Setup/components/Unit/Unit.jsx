@@ -18,7 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useContext, useEffect, useState } from "react";
 import { formattedDateTime } from "../../../../utils/handleDateTime";
 import { ToastContext } from "../../../../contexts/toastProvider";
-import { deleteUnit, getAll } from "../../../../apis/unitService";
+import { deleteUnit, getAllUnit } from "../../../../apis/unitService";
 import ModalCreateUnit from "./ModalCreateUnit";
 
 const Unit = () => {
@@ -49,7 +49,7 @@ const Unit = () => {
   };
   const fetchData = async () => {
     try {
-      const res = await getAll();
+      const res = await getAllUnit();
       setData(res.data.data);
     } catch (error) {
       console.log(error);

@@ -72,7 +72,7 @@ export default function Sidebar() {
         />
 
         <CustomizeListItem
-          to={"inventory"}
+          to={"inventories"}
           icon={<InventoryIcon />}
           text={"Quản lý tồn kho"}
         />
@@ -133,25 +133,6 @@ export default function Sidebar() {
             />
           </List>
         </Collapse>
-        {/* 
-        <ListItemButton onClick={handleClickSetup}>
-          <ListItemIcon>
-            <SettingsSuggestIcon />
-          </ListItemIcon>
-          <ListItemText primary="Thiết lập" />
-          {openSetup ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-
-        <Collapse in={openSetup} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <CustomizeListItem
-              to={"warehouse"}
-              text={"Kho hàng"}
-              icon={<StoreIcon />}
-              sx={{ pl: 4 }}
-            />
-          </List>
-        </Collapse> */}
 
         <CustomizeListItem
           to={"setup"}
