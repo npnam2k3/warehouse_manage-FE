@@ -4,7 +4,7 @@ export const createUnit = async (body) => {
   return axiosClient.post("/unit", body);
 };
 
-export const getAll = async () => {
+export const getAllUnit = async () => {
   return axiosClient.get("/unit");
 };
 

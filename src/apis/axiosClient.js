@@ -3,13 +3,16 @@ import axios from "axios";
 const axiosClient = axios.create({
   baseURL: "http://localhost:5000",
   timeout: 10000,
-  headers: { "Content-Type": "application/json" },
+  // headers: { "Content-Type": "application/json" },
   withCredentials: true,
 });
 // Add a request interceptor
 axiosClient.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    // if (config.data instanceof FormData) {
+    //   delete config.headers["Content-Type"]; // Để axios tự set multipart/form-data
+    // }
     const accessToken = localStorage.getItem("accessToken");
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -33,11 +36,11 @@ axiosClient.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const originalRequest = error.config;
-    if (error.response.status === 423) {
+    if (error.response?.status === 423) {
       return Promise.reject(error);
     }
     const token = localStorage.getItem("accessToken");
-    if (error.response.status === 401 && token && !originalRequest._retry) {
+    if (error.response?.status === 401 && token && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const res = await axios.post(
