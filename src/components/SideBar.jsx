@@ -15,7 +15,7 @@ import FactoryIcon from "@mui/icons-material/Factory";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import MoveToInboxIcon from "@mui/icons-material/MoveToInbox";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
@@ -37,20 +37,35 @@ const CustomizeListItem = ({ to, icon, text, sx = {} }) => (
   </NavLink>
 );
 export default function Sidebar() {
+  const location = useLocation();
   const [openPartner, setOpenPartner] = React.useState(false);
   const [openOrder, setOpenOrder] = React.useState(false);
-  const [openSetup, setOpenSetup] = React.useState(false);
 
   const handleClickPartner = () => {
     setOpenPartner(!openPartner);
+    localStorage.setItem("openPartner", newState.toString());
   };
 
   const handleClickOrder = () => {
     setOpenOrder(!openOrder);
   };
-  const handleClickSetup = () => {
-    setOpenSetup(!openSetup);
-  };
+
+  // Khôi phục trạng thái khi component mount
+  React.useEffect(() => {
+    const savedOpenPartner = localStorage.getItem("openPartner") === "true";
+    const isPartnerPage = ["/customers", "/suppliers"].includes(
+      location.pathname
+    );
+
+    // Nếu đang ở trang customers hoặc suppliers, mở Collapse
+    if (isPartnerPage) {
+      setOpenPartner(true);
+      localStorage.setItem("openPartner", "true");
+    } else {
+      setOpenPartner(savedOpenPartner);
+      localStorage.setItem("openPartner", "false");
+    }
+  }, [location.pathname]);
   return (
     <Box
       sx={{
