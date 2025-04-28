@@ -25,3 +25,10 @@ export const getOneSupplier = async (supplierId) => {
 export const deleteSupplier = async (supplierId) => {
   return axiosClient.delete(`/supplies/${supplierId}`);
 };
+
+export const addProductToSupplier = async (body) => {
+  return axiosClient.post("/supplies/add-product-to-supplier", body);
+};
+export const deleteProductFromSupplier = async (body) => {
+  return axiosClient.post("/supplies/delete-product-from-supplier", body);
+};

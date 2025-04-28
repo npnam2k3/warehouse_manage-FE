@@ -11,7 +11,6 @@ import { Box, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
   EMAIL_REGEX,
-  FULLNAME_REGEX,
   NAME_COMPANY_REGEX,
   PHONE_REGEX,
 } from "../../../constant/regex";
