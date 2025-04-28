@@ -31,7 +31,7 @@ const PAYMENT_METHOD = {
   CASH: "Tiền mặt",
   BANK_TRANSFER: "Chuyển khoản",
 };
-const ModalCustomerDetail = ({ customer, open, setOpen }) => {
+const ModalSupplierDetail = ({ supplier, open, setOpen }) => {
   const [openDetails, setOpenDetails] = useState({}); // lưu trạng thái đóng mở của mỗi colapse ứng với từng hóa đơn. VD: {'1': true, '2': false}
 
   const toggleDetail = (orderId) => {
@@ -42,7 +42,7 @@ const ModalCustomerDetail = ({ customer, open, setOpen }) => {
   };
   // console.log(openDetails);
 
-  if (!customer) return null;
+  if (!supplier) return null;
 
   return (
     <Dialog
@@ -54,38 +54,82 @@ const ModalCustomerDetail = ({ customer, open, setOpen }) => {
       maxWidth="md"
       fullScreen
     >
-      <DialogTitle>Thông tin chi tiết khách hàng</DialogTitle>
+      <DialogTitle>Thông tin chi tiết nhà cung cấp</DialogTitle>
       <DialogContent dividers>
         {/* Thông tin cơ bản */}
         <Card sx={{ mb: 2 }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              Thông tin khách hàng
+              Thông tin nhà cung cấp
             </Typography>
             <Box display="flex" flexDirection="column" gap={1}>
-              <Typography>Họ tên: {customer.fullname}</Typography>
-              <Typography>Email: {customer.email}</Typography>
-              <Typography>Số điện thoại: {customer.phone}</Typography>
-              <Typography>Địa chỉ: {customer.address}</Typography>
+              <Typography>Tên nhà cung cấp: {supplier.name_company}</Typography>
+              <Typography>Email: {supplier.email}</Typography>
+              <Typography>Số điện thoại: {supplier.phone}</Typography>
+              <Typography>Địa chỉ: {supplier.address}</Typography>
               <Typography
                 sx={{
                   color:
-                    customer.total_debt > 0 ? "error.main" : "text.primary",
+                    supplier.total_debt > 0 ? "error.main" : "text.primary",
                 }}
               >
-                Công nợ hiện tại: {formatCurrency(customer?.total_debt)}
+                Công nợ hiện tại: {formatCurrency(supplier.total_debt)}
               </Typography>
             </Box>
           </CardContent>
         </Card>
 
+        <Card sx={{ mb: 2 }}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              Danh sách sản phẩm cung cấp
+            </Typography>
+            {supplier.listProducts?.length ? (
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="center">Mã sản phẩm</TableCell>
+                    <TableCell align="center">Tên sản phẩm</TableCell>
+                    <TableCell align="center">Giá nhập</TableCell>
+                    <TableCell align="center">Giá bán</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {supplier.listProducts.map((product, index) => (
+                    <TableRow key={index}>
+                      <TableCell align="center">
+                        {product.product_code}
+                      </TableCell>
+                      <TableCell align="center">{product.name}</TableCell>
+                      <TableCell align="center">
+                        {formatCurrency(product.purchase_price)}
+                      </TableCell>
+                      <TableCell align="center">
+                        {formatCurrency(product.sell_price)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontStyle: "italic",
+                }}
+              >
+                Không có sản phẩm nào.
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
         {/* Lịch sử giao dịch */}
         <Card>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               Lịch sử giao dịch
             </Typography>
-            {customer.listOrders?.length ? (
+            {supplier.listOrders?.length ? (
               <Table>
                 <TableHead>
                   <TableRow>
@@ -99,7 +143,7 @@ const ModalCustomerDetail = ({ customer, open, setOpen }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {customer.listOrders.map((order) => (
+                  {supplier.listOrders.map((order) => (
                     <React.Fragment key={order.idOrder}>
                       <TableRow>
                         <TableCell>
@@ -310,7 +354,7 @@ const ModalCustomerDetail = ({ customer, open, setOpen }) => {
                 </TableBody>
               </Table>
             ) : (
-              <Typography>Khách hàng chưa có giao dịch nào.</Typography>
+              <Typography>Nhà cung cấp chưa có giao dịch nào.</Typography>
             )}
           </CardContent>
         </Card>
@@ -330,4 +374,4 @@ const ModalCustomerDetail = ({ customer, open, setOpen }) => {
   );
 };
 
-export default ModalCustomerDetail;
+export default ModalSupplierDetail;

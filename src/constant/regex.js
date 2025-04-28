@@ -6,3 +6,4 @@ export const USERNAME_REGEX = /^(?!.*\s)[A-Za-z0-9]+$/;
 export const FULLNAME_REGEX = /^(?! )(?!.* {2})[A-Za-zÀ-Ỹà-ỹ ]+(?<! )$/;
 export const PHONE_REGEX =
   /^(0|84)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$/;
+export const NAME_COMPANY_REGEX = /^(?! )(?!.* {2})[A-Za-zÀ-Ỹà-ỹ ]+(?<! )$/;
