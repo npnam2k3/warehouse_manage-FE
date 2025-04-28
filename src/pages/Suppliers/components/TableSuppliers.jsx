@@ -197,6 +197,7 @@ export default function TableSuppliers({ data, fetchData, setPage }) {
         open={openSupplierDetail}
         setOpen={setOpenSupplierDetail}
         supplier={selectedSupplier}
+        fetchData={fetchDataGetOneSupplier}
       />
 
       {/* confirm modal delete */}
@@ -213,7 +214,7 @@ export default function TableSuppliers({ data, fetchData, setPage }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {`Bạn có chắc muốn xóa nhà cung cấp: ${setSelectedSupplier?.name_company}?`}
+          {`Bạn có chắc muốn xóa nhà cung cấp: ${selectedSupplier?.name_company}?`}
         </DialogTitle>
         <DialogContent>
           <Typography>

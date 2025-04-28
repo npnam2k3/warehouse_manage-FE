@@ -11,12 +11,10 @@ import { Box, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import {
   EMAIL_REGEX,
-  FULLNAME_REGEX,
   NAME_COMPANY_REGEX,
   PHONE_REGEX,
 } from "../../../constant/regex";
 import { ToastContext } from "../../../contexts/toastProvider";
-import { updateCustomer } from "../../../apis/customerService";
 import { updateSupplier } from "../../../apis/supplierService";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({

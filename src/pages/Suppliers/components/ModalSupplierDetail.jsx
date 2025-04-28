@@ -21,6 +21,7 @@ import React, { useState } from "react";
 import { formatCurrency } from "../../../utils/formatMoney";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { formattedDateTime } from "../../../utils/handleDateTime";
+import TableProductOfSupplier from "./TableProductOfSupplier";
 
 const PAYMENT_STATUS = {
   PAID: "Đã thanh toán",
@@ -31,7 +32,7 @@ const PAYMENT_METHOD = {
   CASH: "Tiền mặt",
   BANK_TRANSFER: "Chuyển khoản",
 };
-const ModalSupplierDetail = ({ supplier, open, setOpen }) => {
+const ModalSupplierDetail = ({ supplier, open, setOpen, fetchData }) => {
   const [openDetails, setOpenDetails] = useState({}); // lưu trạng thái đóng mở của mỗi colapse ứng với từng hóa đơn. VD: {'1': true, '2': false}
 
   const toggleDetail = (orderId) => {
@@ -78,51 +79,12 @@ const ModalSupplierDetail = ({ supplier, open, setOpen }) => {
             </Box>
           </CardContent>
         </Card>
+        <TableProductOfSupplier
+          listProducts={supplier.listProducts}
+          supplier={supplier}
+          fetchData={fetchData}
+        />
 
-        <Card sx={{ mb: 2 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Danh sách sản phẩm cung cấp
-            </Typography>
-            {supplier.listProducts?.length ? (
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell align="center">Mã sản phẩm</TableCell>
-                    <TableCell align="center">Tên sản phẩm</TableCell>
-                    <TableCell align="center">Giá nhập</TableCell>
-                    <TableCell align="center">Giá bán</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {supplier.listProducts.map((product, index) => (
-                    <TableRow key={index}>
-                      <TableCell align="center">
-                        {product.product_code}
-                      </TableCell>
-                      <TableCell align="center">{product.name}</TableCell>
-                      <TableCell align="center">
-                        {formatCurrency(product.purchase_price)}
-                      </TableCell>
-                      <TableCell align="center">
-                        {formatCurrency(product.sell_price)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  fontStyle: "italic",
-                }}
-              >
-                Không có sản phẩm nào.
-              </Typography>
-            )}
-          </CardContent>
-        </Card>
         {/* Lịch sử giao dịch */}
         <Card>
           <CardContent>

@@ -24,3 +24,7 @@ export const getOneProduct = async (productId) => {
 export const deleteProduct = async (productId) => {
   return axiosClient.delete(`/products/${productId}`);
 };
+
+export const getAllProductsNoPagination = async () => {
+  return axiosClient.get("/products/getAll");
+};
