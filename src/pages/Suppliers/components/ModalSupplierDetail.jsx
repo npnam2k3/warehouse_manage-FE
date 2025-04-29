@@ -22,16 +22,12 @@ import { formatCurrency } from "../../../utils/formatMoney";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { formattedDateTime } from "../../../utils/handleDateTime";
 import TableProductOfSupplier from "./TableProductOfSupplier";
+import {
+  ORDER_STATUS,
+  PAYMENT_METHOD,
+  PAYMENT_STATUS,
+} from "../../../constant/order";
 
-const PAYMENT_STATUS = {
-  PAID: "Đã thanh toán",
-  UNPAID: "Chưa thanh toán",
-  PARTIALLY_PAID: "Đã thanh toán 1 phần",
-};
-const PAYMENT_METHOD = {
-  CASH: "Tiền mặt",
-  BANK_TRANSFER: "Chuyển khoản",
-};
 const ModalSupplierDetail = ({ supplier, open, setOpen, fetchData }) => {
   const [openDetails, setOpenDetails] = useState({}); // lưu trạng thái đóng mở của mỗi colapse ứng với từng hóa đơn. VD: {'1': true, '2': false}
 
@@ -102,6 +98,7 @@ const ModalSupplierDetail = ({ supplier, open, setOpen, fetchData }) => {
                     <TableCell align="center">Số tiền đã thanh toán</TableCell>
                     <TableCell align="center">Số tiền còn lại</TableCell>
                     <TableCell align="center">Trạng thái thanh toán</TableCell>
+                    <TableCell align="center">Trạng thái hoá đơn</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -148,6 +145,20 @@ const ModalSupplierDetail = ({ supplier, open, setOpen, fetchData }) => {
                               order.payment_status === "PAID"
                                 ? "success"
                                 : order.payment_status === "PARTIALLY_PAID"
+                                ? "warning"
+                                : "error"
+                            }
+                            size="small"
+                          />
+                        </TableCell>
+
+                        <TableCell align="center">
+                          <Chip
+                            label={ORDER_STATUS[order.order_status]}
+                            color={
+                              order.order_status === "COMPLETED"
+                                ? "success"
+                                : order.order_status === "PROCESSING"
                                 ? "warning"
                                 : "error"
                             }
