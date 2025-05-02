@@ -13,3 +13,19 @@ export const ORDER_STATUS = {
   CANCELED: "Đã hủy",
   PROCESSING: "Đang xử lý",
 };
+
+export const PaymentStatus = {
+  UNPAID: "UNPAID",
+  PARTIALLY_PAID: "PARTIALLY_PAID",
+  PAID: "PAID",
+};
+
+export const TypePayment = {
+  EXPORT: "EXPORT",
+  IMPORT: "IMPORT",
+};
+
+export const PaymentMethod = {
+  CASH: "CASH",
+  BANK_TRANSFER: "BANK_TRANSFER",
+};

@@ -19,7 +19,6 @@ import { NavLink, useLocation } from "react-router-dom";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import StoreIcon from "@mui/icons-material/Store";
 
 const CustomizeListItem = ({ to, icon, text, sx = {} }) => (
   <NavLink
@@ -42,28 +41,51 @@ export default function Sidebar() {
   const [openOrder, setOpenOrder] = React.useState(false);
 
   const handleClickPartner = () => {
-    setOpenPartner(!openPartner);
+    const newState = !openPartner;
+    setOpenPartner(newState);
     localStorage.setItem("openPartner", newState.toString());
   };
 
   const handleClickOrder = () => {
-    setOpenOrder(!openOrder);
+    const newState = !openOrder;
+    setOpenOrder(newState);
+    localStorage.setItem("openOrder", newState.toString());
   };
 
-  // Khôi phục trạng thái khi component mount
+  // Đối tác
   React.useEffect(() => {
-    const savedOpenPartner = localStorage.getItem("openPartner") === "true";
+    const savedOpenPartner = localStorage.getItem("openPartner");
     const isPartnerPage = ["/customers", "/suppliers"].includes(
       location.pathname
     );
 
-    // Nếu đang ở trang customers hoặc suppliers, mở Collapse
-    if (isPartnerPage) {
-      setOpenPartner(true);
-      localStorage.setItem("openPartner", "true");
+    if (savedOpenPartner === null) {
+      // Chưa có trạng thái trong localStorage → thiết lập mặc định
+      localStorage.setItem("openPartner", isPartnerPage ? "true" : "false");
+      setOpenPartner(isPartnerPage);
     } else {
-      setOpenPartner(savedOpenPartner);
-      localStorage.setItem("openPartner", "false");
+      if (isPartnerPage) {
+        // Trang partner → luôn mở
+        setOpenPartner(true);
+      } else {
+        // Trang khác → giữ trạng thái do người dùng thiết lập
+        setOpenPartner(savedOpenPartner === "true");
+      }
+    }
+  }, [location.pathname]);
+
+  // Hóa đơn
+  React.useEffect(() => {
+    const savedOpenOrder = localStorage.getItem("openOrder");
+    const isOrderPage = ["/import-order", "/export-order"].includes(
+      location.pathname
+    );
+
+    if (savedOpenOrder === null) {
+      localStorage.setItem("openOrder", isOrderPage ? "true" : "false");
+      setOpenOrder(isOrderPage);
+    } else {
+      setOpenOrder(isOrderPage ? true : savedOpenOrder === "true");
     }
   }, [location.pathname]);
   return (

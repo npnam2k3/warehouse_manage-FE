@@ -32,3 +32,11 @@ export const addProductToSupplier = async (body) => {
 export const deleteProductFromSupplier = async (body) => {
   return axiosClient.post("/supplies/delete-product-from-supplier", body);
 };
+
+export const getAllSuppliersNoPagination = async () => {
+  return axiosClient.get("/supplies/getAll");
+};
+
+export const getProductsOfSupplier = async (id) => {
+  return axiosClient.get(`/supplies/get-products-of-supplier/${id}`);
+};
