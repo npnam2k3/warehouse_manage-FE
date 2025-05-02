@@ -34,7 +34,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
   "& .MuiDialog-paper": {
     width: "80%",
-    maxWidth: "800px", // giới hạn không quá to
+    maxWidth: "800px",
     height: "80%",
     borderRadius: 12,
   },
