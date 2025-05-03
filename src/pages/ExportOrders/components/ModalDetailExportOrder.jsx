@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -23,13 +23,24 @@ import {
   PAYMENT_METHOD,
   PAYMENT_STATUS,
 } from "../../../constant/order";
+import PrintInvoiceModal from "./PrintInvoiceModal";
 
-export default function ModalDetailImportOrder({ open, setOpen, data }) {
+export default function ModalDetailExportOrder({ open, setOpen, data }) {
+  const [openPrintInvoiceModal, setOpenPrintInvoiceModal] = useState(false);
+
+  const calcTotalQuantity = () =>
+    export_order_details.reduce((sum, item) => sum + item.quantity, 0);
+  const calcTotalAmount = () =>
+    export_order_details.reduce(
+      (sum, item) => sum + item.quantity * item.sell_price,
+      0
+    );
+
   if (!data) return null;
 
   const {
-    supplier,
-    import_order_code,
+    customer,
+    export_order_code,
     total_amount,
     amount_paid,
     amount_due,
@@ -37,32 +48,24 @@ export default function ModalDetailImportOrder({ open, setOpen, data }) {
     payment_due_date,
     order_status,
     createdAt,
-    import_order_details,
+    export_order_details,
     paymentDetails,
   } = data;
-
-  const calcTotalQuantity = () =>
-    import_order_details.reduce((sum, item) => sum + item.quantity, 0);
-  const calcTotalAmount = () =>
-    import_order_details.reduce(
-      (sum, item) => sum + item.quantity * item.purchase_price,
-      0
-    );
   return (
     <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
-      <DialogTitle>Chi tiết hóa đơn nhập</DialogTitle>
+      <DialogTitle>Chi tiết hóa đơn bán hàng</DialogTitle>
       <DialogContent dividers>
         {/* Nhà cung cấp */}
         <Typography variant="h6" gutterBottom>
-          Thông tin nhà cung cấp
+          Thông tin khách hàng
         </Typography>
         <Box mb="20px">
           <Typography>
-            Tên nhà cung cấp: <strong>{supplier.name_company}</strong>
+            Tên khách hàng: <strong>{customer?.fullname}</strong>
           </Typography>
-          <Typography>Số điện thoại: {supplier.phone}</Typography>
-          <Typography>Email: {supplier.email}</Typography>
-          <Typography>Địa chỉ: {supplier.address}</Typography>
+          <Typography>Số điện thoại: {customer?.phone}</Typography>
+          <Typography>Email: {customer?.email}</Typography>
+          <Typography>Địa chỉ: {customer?.address}</Typography>
         </Box>
 
         {/* Thông tin hóa đơn */}
@@ -71,7 +74,7 @@ export default function ModalDetailImportOrder({ open, setOpen, data }) {
         </Typography>
         <Box mb="20px">
           <Typography>
-            Mã hóa đơn: <strong>{import_order_code}</strong>
+            Mã hóa đơn: <strong>{export_order_code}</strong>
           </Typography>
           <Typography>
             Tổng tiền hóa đơn: <strong>{formatCurrency(total_amount)}</strong>
@@ -104,7 +107,7 @@ export default function ModalDetailImportOrder({ open, setOpen, data }) {
             </Typography>
           )}
           <Typography>
-            Trạng thái hóa đơn:
+            Trạng thái hóa đơn:{" "}
             <strong
               style={{ color: order_status === "CANCELED" ? "red" : "inherit" }}
             >
@@ -143,16 +146,16 @@ export default function ModalDetailImportOrder({ open, setOpen, data }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {import_order_details.map((item) => (
+              {export_order_details.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell>{item.product.name}</TableCell>
                   <TableCell>{item.product.product_code}</TableCell>
                   <TableCell align="right">{item.quantity}</TableCell>
                   <TableCell align="right">
-                    {item.purchase_price.toLocaleString()} đ
+                    {formatCurrency(item.sell_price)}
                   </TableCell>
                   <TableCell align="right">
-                    {(item.purchase_price * item.quantity).toLocaleString()} đ
+                    {formatCurrency(item.sell_price * item.quantity)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -211,6 +214,17 @@ export default function ModalDetailImportOrder({ open, setOpen, data }) {
       </DialogContent>
 
       <DialogActions>
+        {order_status !== "CANCELED" && (
+          <Button
+            onClick={() => {
+              setOpenPrintInvoiceModal(true);
+            }}
+            variant="contained"
+            color="primary"
+          >
+            In hóa đơn
+          </Button>
+        )}
         <Button
           onClick={() => setOpen(false)}
           variant="contained"
@@ -219,6 +233,14 @@ export default function ModalDetailImportOrder({ open, setOpen, data }) {
           Đóng
         </Button>
       </DialogActions>
+
+      {openPrintInvoiceModal && (
+        <PrintInvoiceModal
+          open={openPrintInvoiceModal}
+          setOpen={setOpenPrintInvoiceModal}
+          order={data}
+        />
+      )}
     </Dialog>
   );
 }

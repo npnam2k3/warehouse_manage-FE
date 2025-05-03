@@ -25,3 +25,7 @@ export const getOneCustomer = async (customerId) => {
 export const deleteCustomer = async (customerId) => {
   return axiosClient.delete(`/customers/${customerId}`);
 };
+
+export const getAllCustomersNoPagination = async () => {
+  return axiosClient.get("/customers/getAll");
+};
