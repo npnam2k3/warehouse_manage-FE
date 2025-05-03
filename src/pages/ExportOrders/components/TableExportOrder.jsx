@@ -17,13 +17,13 @@ import { formatCurrency } from "../../../utils/formatMoney";
 import { formattedDateTime } from "../../../utils/handleDateTime";
 import { ORDER_STATUS, PAYMENT_STATUS } from "../../../constant/order";
 import {
-  confirmImportOrder,
-  getOneImportOrder,
-} from "../../../apis/importOrderService";
-import ModalCancelImportOrder from "./ModalCancelImportOrder";
-import ModalDetailImportOrder from "./ModalDetailImportOrder";
+  confirmExportOrder,
+  getOneExportOrder,
+} from "../../../apis/exportOrderService";
 
-import ModalPaymentImportOrder from "../../../components/payments/ModalPaymentImportOrder";
+import ModalDetailExportOrder from "./ModalDetailExportOrder";
+import ModalCancelExportOrder from "./ModalCancelExportOrder";
+import ModalPaymentExportOrder from "../../../components/payments/ModalPaymentExportOrder";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -45,23 +45,23 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function TableImportOrder({ data, setPage, fetchData }) {
+export default function TableExportOrder({ data, setPage, fetchData }) {
   const { toast } = React.useContext(ToastContext);
-  const [selectedImportOrder, setSelectedImportOrder] = React.useState(null);
+  const [selectedExportOrder, setSelectedExportOrder] = React.useState(null);
   const [openModalCancel, setOpenModalCancel] = React.useState(false);
-  const [openImportOrderDetail, setOpenImportOrderDetail] =
+  const [openExportOrderDetail, setOpenExportOrderDetail] =
     React.useState(false);
 
   const [openModalPayment, setOpenModalPayment] = React.useState(false);
 
-  const handleClickDetailImportOrder = (order) => {
-    fetchDataGetOneImportOrder(order?.id);
-    setOpenImportOrderDetail(true);
+  const handleClickDetailExportOrder = (order) => {
+    fetchDataGetOneExportOrder(order?.id);
+    setOpenExportOrderDetail(true);
   };
 
   const handleClickConfirm = async (id) => {
     try {
-      const res = await confirmImportOrder(id);
+      const res = await confirmExportOrder(id);
       toast.success(res.data?.message);
       setPage(1);
       fetchData();
@@ -71,20 +71,20 @@ export default function TableImportOrder({ data, setPage, fetchData }) {
     }
   };
 
-  const handleClickCancel = (importOrder) => {
-    setSelectedImportOrder(importOrder);
+  const handleClickCancel = (exportOrder) => {
+    setSelectedExportOrder(exportOrder);
     setOpenModalCancel(true);
   };
 
   const handleClickPayment = (order) => {
-    fetchDataGetOneImportOrder(order?.id);
+    fetchDataGetOneExportOrder(order?.id);
     setOpenModalPayment(true);
   };
 
-  const fetchDataGetOneImportOrder = async (id) => {
+  const fetchDataGetOneExportOrder = async (id) => {
     try {
-      const res = await getOneImportOrder(id);
-      setSelectedImportOrder(res.data?.data);
+      const res = await getOneExportOrder(id);
+      setSelectedExportOrder(res.data?.data);
     } catch (error) {
       console.log(error);
     }
@@ -96,7 +96,7 @@ export default function TableImportOrder({ data, setPage, fetchData }) {
         <TableHead>
           <TableRow>
             <StyledTableCell>Mã hóa đơn</StyledTableCell>
-            <StyledTableCell>Nhà cung cấp</StyledTableCell>
+            <StyledTableCell>Tên khách hàng</StyledTableCell>
             <StyledTableCell>Ngày tạo</StyledTableCell>
             <StyledTableCell>Tổng tiền</StyledTableCell>
             <StyledTableCell>Trạng thái thanh toán</StyledTableCell>
@@ -108,9 +108,9 @@ export default function TableImportOrder({ data, setPage, fetchData }) {
           {data.map((row, index) => (
             <StyledTableRow key={index}>
               <StyledTableCell component="th" scope="row">
-                {row.import_order_code}
+                {row.export_order_code}
               </StyledTableCell>
-              <StyledTableCell>{row.supplier?.name_company}</StyledTableCell>
+              <StyledTableCell>{row.customer?.fullname}</StyledTableCell>
               <StyledTableCell>
                 {formattedDateTime(row.createdAt)}
               </StyledTableCell>
@@ -164,7 +164,7 @@ export default function TableImportOrder({ data, setPage, fetchData }) {
                       p: "4px",
                       cursor: "pointer",
                     }}
-                    onClick={() => handleClickDetailImportOrder(row)}
+                    onClick={() => handleClickDetailExportOrder(row)}
                   >
                     <VisibilityIcon sx={{ fontSize: "20px" }} />
                   </Box>
@@ -266,31 +266,31 @@ export default function TableImportOrder({ data, setPage, fetchData }) {
       </Table>
 
       {/* modal view detail import order */}
-      {openImportOrderDetail && (
-        <ModalDetailImportOrder
-          open={openImportOrderDetail}
-          setOpen={setOpenImportOrderDetail}
-          data={selectedImportOrder}
+      {openExportOrderDetail && (
+        <ModalDetailExportOrder
+          open={openExportOrderDetail}
+          setOpen={setOpenExportOrderDetail}
+          data={selectedExportOrder}
         />
       )}
 
       {/* modal cancel */}
       {openModalCancel && (
-        <ModalCancelImportOrder
+        <ModalCancelExportOrder
           open={openModalCancel}
           setOpen={setOpenModalCancel}
           fetchData={fetchData}
           setPage={setPage}
-          import_order={selectedImportOrder}
+          export_order={selectedExportOrder}
         />
       )}
 
       {/* modal payment */}
       {openModalPayment && (
-        <ModalPaymentImportOrder
+        <ModalPaymentExportOrder
           open={openModalPayment}
           setOpen={setOpenModalPayment}
-          import_order={selectedImportOrder}
+          export_order={selectedExportOrder}
           fetchData={fetchData}
           setPage={setPage}
         />

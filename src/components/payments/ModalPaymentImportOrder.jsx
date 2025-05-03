@@ -19,7 +19,13 @@ import {
 import { createPayment } from "../../apis/paymentService";
 import { ToastContext } from "../../contexts/toastProvider";
 
-const ModalPayment = ({ open, setOpen, import_order, fetchData, setPage }) => {
+const ModalPaymentImportOrder = ({
+  open,
+  setOpen,
+  import_order,
+  fetchData,
+  setPage,
+}) => {
   const {
     control,
     handleSubmit,
@@ -294,4 +300,4 @@ const ModalPayment = ({ open, setOpen, import_order, fetchData, setPage }) => {
   );
 };
 
-export default ModalPayment;
+export default ModalPaymentImportOrder;
