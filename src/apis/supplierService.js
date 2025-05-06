@@ -40,3 +40,11 @@ export const getAllSuppliersNoPagination = async () => {
 export const getProductsOfSupplier = async (id) => {
   return axiosClient.get(`/supplies/get-products-of-supplier/${id}`);
 };
+
+export const getSuppliersHaveDebt = async (search) => {
+  let path = `/supplies/getSuppliersHaveDebt`;
+  if (search) {
+    path += `?search=${search}`;
+  }
+  return axiosClient.get(path);
+};

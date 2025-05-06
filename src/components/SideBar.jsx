@@ -19,6 +19,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CategoryIcon from "@mui/icons-material/Category";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
 const CustomizeListItem = ({ to, icon, text, sx = {} }) => (
   <NavLink
@@ -39,6 +40,7 @@ export default function Sidebar() {
   const location = useLocation();
   const [openPartner, setOpenPartner] = React.useState(false);
   const [openOrder, setOpenOrder] = React.useState(false);
+  const [openDebt, setOpenDebt] = React.useState(false);
 
   const handleClickPartner = () => {
     const newState = !openPartner;
@@ -50,6 +52,12 @@ export default function Sidebar() {
     const newState = !openOrder;
     setOpenOrder(newState);
     localStorage.setItem("openOrder", newState.toString());
+  };
+
+  const handleClickDebt = () => {
+    const newState = !openDebt;
+    setOpenDebt(newState);
+    localStorage.setItem("openDebt", newState.toString());
   };
 
   // Đối tác
@@ -86,6 +94,21 @@ export default function Sidebar() {
       setOpenOrder(isOrderPage);
     } else {
       setOpenOrder(isOrderPage ? true : savedOpenOrder === "true");
+    }
+  }, [location.pathname]);
+
+  // công nợ
+  React.useEffect(() => {
+    const savedOpenDebt = localStorage.getItem("openDebt");
+    const isDebtPage = ["/supplier-debt", "/customer-debt"].includes(
+      location.pathname
+    );
+
+    if (savedOpenDebt === null) {
+      localStorage.setItem("openOrder", isDebtPage ? "true" : "false");
+      setOpenDebt(isDebtPage);
+    } else {
+      setOpenDebt(isDebtPage ? true : savedOpenDebt === "true");
     }
   }, [location.pathname]);
   return (
@@ -166,6 +189,32 @@ export default function Sidebar() {
               to={"export-order"}
               text={"Đơn xuất"}
               icon={<LocalShippingIcon />}
+              sx={{ pl: 4 }}
+            />
+          </List>
+        </Collapse>
+
+        <ListItemButton onClick={handleClickDebt}>
+          <ListItemIcon>
+            <AttachMoneyIcon />
+          </ListItemIcon>
+          <ListItemText primary="Công nợ" />
+          {openDebt ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+
+        <Collapse in={openDebt} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <CustomizeListItem
+              to={"customer-debt"}
+              text={"Với khách hàng"}
+              icon={<PersonIcon />}
+              sx={{ pl: 4 }}
+            />
+
+            <CustomizeListItem
+              to={"supplier-debt"}
+              text={"Với nhà cung cấp"}
+              icon={<FactoryIcon />}
               sx={{ pl: 4 }}
             />
           </List>

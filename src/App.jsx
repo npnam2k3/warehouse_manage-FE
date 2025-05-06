@@ -21,6 +21,7 @@ import CustomersPage from "./pages/Customers/CustomersPage";
 import SuppliersPage from "./pages/Suppliers/SuppliersPage";
 import ImportOrders from "./pages/ImportOrders/ImportOrders";
 import ExportOrders from "./pages/ExportOrders/ExportOrders";
+import SupplierDebt from "./pages/SupplierDebt/SupplierDebt";
 
 function App() {
   const theme = createTheme({
@@ -67,6 +68,10 @@ function App() {
                   <Route path="suppliers" element={<SuppliersPage />} />
                   <Route path="import-order" element={<ImportOrders />} />
                   <Route path="export-order" element={<ExportOrders />} />
+
+                  <Route path="supplier-debt" element={<SupplierDebt />} />
+                  <Route path="export-order" element={<ExportOrders />} />
+
                   <Route path="categories" element={<CategoriesPage />} />
                 </Route>
               </Route>
