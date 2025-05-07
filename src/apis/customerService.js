@@ -29,3 +29,11 @@ export const deleteCustomer = async (customerId) => {
 export const getAllCustomersNoPagination = async () => {
   return axiosClient.get("/customers/getAll");
 };
+
+export const getCustomersHaveDebt = async (search) => {
+  let path = `/customers/getCustomersHaveDebt`;
+  if (search) {
+    path += `?search=${search}`;
+  }
+  return axiosClient.get(path);
+};
