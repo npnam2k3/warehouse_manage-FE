@@ -10,13 +10,20 @@ import React, { useContext, useEffect, useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from "@mui/material/CircularProgress";
+import EditIcon from "@mui/icons-material/Edit";
+import HistoryIcon from "@mui/icons-material/History";
 
 import { getAll } from "../../apis/categoryService";
 import TableInventories from "./components/TableInventories";
-import { getAllProducts } from "../../apis/productService";
+import {
+  getAllProducts,
+  getAllProductsHaveQuantityInWarehouse,
+} from "../../apis/productService";
 import { ToastContext } from "../../contexts/toastProvider";
 import ModalCreateProduct from "./components/ModalCreateProduct";
 import { getAllUnit } from "../../apis/unitService";
+import ModalAdjustInventory from "./components/ModalAdjustInventory";
+import ModalAdjustmentInventoryLog from "./components/ModalAdjustmentInventoryLog";
 
 const Inventories = () => {
   const [categories, setCategories] = useState([]);
@@ -32,9 +39,22 @@ const Inventories = () => {
   const [category, setCategory] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
 
+  const [productsHaveQuantityInWarehouse, setProductsHaveQuantityInWarehouse] =
+    useState([]);
+
   const [openCreateModal, setOpenCreateModal] = useState(false);
+  const [openModalAdjustInventory, setOpenModalAdjustInventory] =
+    useState(false);
+
+  const [openModalAdjustmentInventory, setOpenModalAdjustmentInventory] =
+    useState(false);
+
   const handleOpenModalCreate = () => {
     setOpenCreateModal(true);
+  };
+
+  const handleOpenModalAdjustInventory = () => {
+    setOpenModalAdjustInventory(true);
   };
 
   const handleFilterCategory = (event, newValue) => {
@@ -87,6 +107,18 @@ const Inventories = () => {
       setIsLoadingProduct(false);
     }
   };
+
+  // dùng cho điều chỉnh tồn kho
+  const fetchDataProductsHaveQuantityInWarehouse = async () => {
+    try {
+      const res = await getAllProductsHaveQuantityInWarehouse();
+      setProductsHaveQuantityInWarehouse(
+        formattedProductsHaveQuantityInWarehouse(res.data?.data)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchDataCategories();
     fetchDataUnits();
@@ -95,6 +127,10 @@ const Inventories = () => {
   useEffect(() => {
     fetchDataProduct();
   }, [page]);
+
+  useEffect(() => {
+    fetchDataProductsHaveQuantityInWarehouse();
+  }, []);
 
   const formattedCategories = (categories) => {
     return categories.map((category) => {
@@ -110,16 +146,48 @@ const Inventories = () => {
       id: unit.id,
     }));
   };
+
+  const formattedProductsHaveQuantityInWarehouse = (listProducts) => {
+    return listProducts.map((pro) => {
+      return {
+        label: pro.name,
+        id: pro.id,
+        inventories: pro.inventories?.map((inv) => ({
+          label: inv.warehouse.name,
+          id: inv.warehouse.id,
+          quantity: inv.quantity,
+        })),
+      };
+    });
+  };
   return (
     <Box sx={{ bgcolor: "#F0F1FA", minHeight: "100vh", p: 3 }}>
       {/* title and button add */}
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+      <Box sx={{ mb: "20px" }}>
         <Typography variant="h5" sx={{ fontWeight: "500" }}>
           Quản lý tồn kho
         </Typography>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button
           variant="contained"
-          sx={{ display: "flex", gap: "5px", mx: "30px" }}
+          sx={{ display: "flex", gap: "5px" }}
+          onClick={() => setOpenModalAdjustmentInventory(true)}
+        >
+          <HistoryIcon sx={{ fontSize: "20px" }} />
+          <Typography component="span">Lịch sử điều chỉnh tồn kho</Typography>
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ display: "flex", gap: "5px" }}
+          onClick={handleOpenModalAdjustInventory}
+        >
+          <EditIcon sx={{ fontSize: "20px" }} />
+          <Typography variant="span">Điều chỉnh tồn kho</Typography>
+        </Button>
+        <Button
+          variant="contained"
+          sx={{ display: "flex", gap: "5px" }}
           onClick={handleOpenModalCreate}
         >
           <AddIcon />
@@ -215,13 +283,34 @@ const Inventories = () => {
       </Box>
 
       {/* modal create product */}
-      <ModalCreateProduct
-        open={openCreateModal}
-        setOpen={setOpenCreateModal}
-        fetData={fetchDataProduct}
-        categories={categories}
-        units={units}
-      />
+      {openCreateModal && (
+        <ModalCreateProduct
+          open={openCreateModal}
+          setOpen={setOpenCreateModal}
+          fetData={fetchDataProduct}
+          categories={categories}
+          setPage={setPage}
+          units={units}
+        />
+      )}
+
+      {/* modal adjust inventory */}
+      {openModalAdjustInventory && (
+        <ModalAdjustInventory
+          open={openModalAdjustInventory}
+          setOpen={setOpenModalAdjustInventory}
+          products={productsHaveQuantityInWarehouse}
+          fetchData={fetchDataProduct}
+          setPage={setPage}
+        />
+      )}
+
+      {openModalAdjustmentInventory && (
+        <ModalAdjustmentInventoryLog
+          open={openModalAdjustmentInventory}
+          setOpen={setOpenModalAdjustmentInventory}
+        />
+      )}
     </Box>
   );
 };
