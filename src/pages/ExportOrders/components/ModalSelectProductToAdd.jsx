@@ -141,7 +141,7 @@ const ModalSelectProductToAdd = ({
         sx={{ m: 0, p: 2, textAlign: "center" }}
         id="customized-dialog-title"
       >
-        {"Chọn sản phẩm cho phiếu nhập"}
+        {"Chọn sản phẩm cho phiếu xuất"}
       </DialogTitle>
 
       <IconButton

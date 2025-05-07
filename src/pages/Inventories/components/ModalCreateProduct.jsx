@@ -30,7 +30,14 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const ModalCreateProduct = ({ open, setOpen, fetData, categories, units }) => {
+const ModalCreateProduct = ({
+  open,
+  setOpen,
+  fetData,
+  categories,
+  units,
+  setPage,
+}) => {
   const {
     reset,
     register,
@@ -103,6 +110,7 @@ const ModalCreateProduct = ({ open, setOpen, fetData, categories, units }) => {
       setOpen(false);
       setPreview(null);
       setErrorFile("");
+      setPage(1);
       fetData();
     } catch (error) {
       const errorMessage =
