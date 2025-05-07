@@ -17,8 +17,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#A1E3F9",
     color: theme.palette.common.black,
+    textAlign: "center",
   },
   [`&.${tableCellClasses.body}`]: {
+    textAlign: "center",
     fontSize: 14,
   },
 }));
@@ -32,29 +34,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-const ListProduct = () => {
-  const data = [
-    {
-      name: "Nước nắm Nam Ngư",
-      category: "Nước mắm",
-      quantity: 20,
-    },
-    {
-      name: "Nước nắm Nam Ngư",
-      category: "Nước mắm",
-      quantity: 20,
-    },
-    {
-      name: "Nước nắm Nam Ngư",
-      category: "Nước mắm",
-      quantity: 20,
-    },
-    {
-      name: "Nước nắm Nam Ngư",
-      category: "Nước mắm",
-      quantity: 20,
-    },
-  ];
+const ListProduct = ({ products, inventoryThreshold }) => {
   return (
     <Box sx={{ p: "20px" }}>
       <Typography
@@ -62,25 +42,29 @@ const ListProduct = () => {
         fontWeight={600}
         sx={{ textAlign: "center", mb: "20px" }}
       >
-        Sản phẩm có lượng tồn kho thấp
+        Sản phẩm trong các kho có số lượng thấp
       </Typography>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
+              <StyledTableCell>Mã sản phẩm</StyledTableCell>
               <StyledTableCell>Tên sản phẩm</StyledTableCell>
-              <StyledTableCell>Danh mục</StyledTableCell>
+              <StyledTableCell>Kho lưu trữ</StyledTableCell>
               <StyledTableCell>Số lượng</StyledTableCell>
+              <StyledTableCell>Ngưỡng đánh giá</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row, index) => (
+            {products?.map((row, index) => (
               <StyledTableRow key={index}>
                 <StyledTableCell component="th" scope="row">
-                  {row.name}
+                  {row?.product?.product_code}
                 </StyledTableCell>
-                <StyledTableCell>{row.category}</StyledTableCell>
-                <StyledTableCell>{row.quantity}</StyledTableCell>
+                <StyledTableCell>{row?.product?.name}</StyledTableCell>
+                <StyledTableCell>{row?.warehouse?.name}</StyledTableCell>
+                <StyledTableCell>{row?.quantity}</StyledTableCell>
+                <StyledTableCell>{inventoryThreshold}</StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
