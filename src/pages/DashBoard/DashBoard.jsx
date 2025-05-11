@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import ListProduct from "./components/ListProduct";
 import StatsCard from "./components/StatsCard";
 import {
@@ -49,47 +49,66 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ bgcolor: "#F0F1FA", minHeight: "100vh", p: 3 }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "nowrap",
-          bgcolor: "#fff",
-          p: 1,
-          borderRadius: 2,
-          boxShadow: 2,
-        }}
-      >
-        <StatsCard
-          title={"Số lượng mặt hàng hiện có"}
-          value={baseInfo?.quantityProducts}
-          color={"#F3F3E0"}
-        />
-        <StatsCard
-          title={"Số lượng danh mục sản phẩm"}
-          value={baseInfo?.countCategory}
-          color={"#DBFFCB"}
-        />
-        <StatsCard
-          title={"Số đơn nhập hôm nay"}
-          value={baseInfo?.countImportOrderToday}
-          color={"#AFDDFF"}
-        />
-        <StatsCard
-          title={"Số đơn xuất hôm nay"}
-          value={baseInfo?.countExportOrderToday}
-          color={"#BEE4D0"}
-        />
-        <StatsCard
-          title={"Doanh thu hôm nay"}
-          value={baseInfo?.totalRevenue}
-          color={"#EAEAEA"}
-        />
-        <StatsCard
-          title={"Chi phí nhập hàng hôm nay"}
-          value={baseInfo?.totalCost}
-          color={"#F8F2DE"}
-        />
+      <Box sx={{ pl: 2 }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            bgcolor: "#fff",
+            pr: 2,
+            pt: 2,
+            pb: 2,
+            borderRadius: 2,
+            boxShadow: 2,
+          }}
+        >
+          <Grid item xs={12} sm={6} md={4}>
+            <StatsCard
+              title={"Số lượng mặt hàng hiện có"}
+              value={baseInfo?.quantityProducts}
+              color={"#F3F3E0"}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatsCard
+              title={"Số lượng danh mục sản phẩm"}
+              value={baseInfo?.countCategory}
+              color={"#DBFFCB"}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatsCard
+              title={"Số đơn nhập hôm nay"}
+              value={baseInfo?.countImportOrderToday}
+              color={"#AFDDFF"}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatsCard
+              title={"Số đơn xuất hôm nay"}
+              value={baseInfo?.countExportOrderToday}
+              color={"#BEE4D0"}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatsCard
+              title={"Doanh thu hôm nay"}
+              value={baseInfo?.totalRevenue}
+              color={"#EAEAEA"}
+              suffix=" đ"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <StatsCard
+              title={"Chi phí nhập hàng hôm nay"}
+              value={baseInfo?.totalCost}
+              color={"#F8F2DE"}
+              suffix=" đ"
+            />
+          </Grid>
+        </Grid>
       </Box>
+
       {recentOrders?.importOrdersRecent?.length > 0 &&
         recentOrders?.exportOrdersRecent?.length > 0 && (
           <Box

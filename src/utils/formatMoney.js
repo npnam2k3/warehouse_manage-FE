@@ -5,3 +5,7 @@ export const formatCurrency = (value) => {
     currency: "VND",
   });
 };
+
+export const formatCurrencyForExportExcel = (value) => {
+  return value.toLocaleString("en-US");
+};
