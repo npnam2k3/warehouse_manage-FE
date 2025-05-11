@@ -11,6 +11,7 @@ import { Dashboard } from "@mui/icons-material";
 import GroupIcon from "@mui/icons-material/Group";
 import HandshakeIcon from "@mui/icons-material/Handshake";
 import PersonIcon from "@mui/icons-material/Person";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import FactoryIcon from "@mui/icons-material/Factory";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -220,6 +221,11 @@ export default function Sidebar() {
           </List>
         </Collapse>
 
+        <CustomizeListItem
+          to={"statistic-report"}
+          icon={<BarChartIcon />}
+          text={"Báo cáo & thống kê"}
+        />
         <CustomizeListItem
           to={"setup"}
           icon={<SettingsSuggestIcon />}

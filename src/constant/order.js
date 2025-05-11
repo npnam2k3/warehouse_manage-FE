@@ -8,6 +8,11 @@ export const PAYMENT_METHOD = {
   BANK_TRANSFER: "Chuyển khoản",
 };
 
+export const TYPE_ORDER = {
+  IMPORT: "nhập",
+  EXPORT: "xuất",
+};
+
 export const ORDER_STATUS = {
   COMPLETED: "Đã xác nhận",
   CANCELED: "Đã hủy",
