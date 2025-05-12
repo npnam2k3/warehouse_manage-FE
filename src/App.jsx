@@ -24,6 +24,7 @@ import ExportOrders from "./pages/ExportOrders/ExportOrders";
 import SupplierDebt from "./pages/SupplierDebt/SupplierDebt";
 import CustomerDebt from "./pages/CustomerDebt/CustomerDebt";
 import StatisticReport from "./pages/StatisticReport/StatisticReport";
+import { Role } from "./constant/role";
 
 function App() {
   const theme = createTheme({
@@ -51,11 +52,50 @@ function App() {
               <Route element={<RequireAuth />}>
                 <Route path="/" element={<MainLayout />}>
                   {/* role admin */}
-                  <Route element={<PrivateRoute allowedRoles={["ADMIN"]} />}>
+                  <Route element={<PrivateRoute allowedRoles={[Role.ADMIN]} />}>
                     <Route path="users" element={<UserPage />} />
                   </Route>
 
-                  {/* role accountant */}
+                  {/* role accountant + admin */}
+                  <Route
+                    element={
+                      <PrivateRoute
+                        allowedRoles={[Role.ADMIN, Role.ACCOUNTANT]}
+                      />
+                    }
+                  >
+                    <Route path="setup" element={<SetupPage />} />
+                    <Route path="customers" element={<CustomersPage />} />
+                    <Route path="suppliers" element={<SuppliersPage />} />
+                    <Route path="import-order" element={<ImportOrders />} />
+                    <Route path="export-order" element={<ExportOrders />} />
+
+                    <Route path="supplier-debt" element={<SupplierDebt />} />
+                    <Route path="customer-debt" element={<CustomerDebt />} />
+                    <Route
+                      path="statistic-report"
+                      element={<StatisticReport />}
+                    />
+
+                    <Route path="categories" element={<CategoriesPage />} />
+                  </Route>
+
+                  {/* role admin + accountant + warehouse_manager */}
+                  <Route
+                    element={
+                      <PrivateRoute
+                        allowedRoles={[
+                          Role.ADMIN,
+                          Role.ACCOUNTANT,
+                          Role.WAREHOUSE_MANAGER,
+                        ]}
+                      />
+                    }
+                  >
+                    <Route path="inventories" element={<Inventories />} />
+                  </Route>
+
+                  {/* route personal */}
                   <Route index element={<Dashboard />} />
                   <Route path="unauthorized" element={<ForbiddenPage />} />
                   <Route path="profile" element={<ProfilePage />} />
@@ -63,22 +103,6 @@ function App() {
                     path="changePassword"
                     element={<ChangePasswordPage />}
                   />
-
-                  <Route path="inventories" element={<Inventories />} />
-                  <Route path="setup" element={<SetupPage />} />
-                  <Route path="customers" element={<CustomersPage />} />
-                  <Route path="suppliers" element={<SuppliersPage />} />
-                  <Route path="import-order" element={<ImportOrders />} />
-                  <Route path="export-order" element={<ExportOrders />} />
-
-                  <Route path="supplier-debt" element={<SupplierDebt />} />
-                  <Route path="customer-debt" element={<CustomerDebt />} />
-                  <Route
-                    path="statistic-report"
-                    element={<StatisticReport />}
-                  />
-
-                  <Route path="categories" element={<CategoriesPage />} />
                 </Route>
               </Route>
             </Routes>

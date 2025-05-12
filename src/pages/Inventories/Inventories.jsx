@@ -20,10 +20,13 @@ import {
   getAllProductsHaveQuantityInWarehouse,
 } from "../../apis/productService";
 import { ToastContext } from "../../contexts/toastProvider";
+import { AuthContext } from "../../contexts/AuthProvider";
 import ModalCreateProduct from "./components/ModalCreateProduct";
 import { getAllUnit } from "../../apis/unitService";
 import ModalAdjustInventory from "./components/ModalAdjustInventory";
 import ModalAdjustmentInventoryLog from "./components/ModalAdjustmentInventoryLog";
+
+import { Role } from "../../constant/role";
 
 const Inventories = () => {
   const [categories, setCategories] = useState([]);
@@ -31,7 +34,11 @@ const Inventories = () => {
   const [inventories, setInventories] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+
   const { toast } = useContext(ToastContext);
+  const { profile } = useContext(AuthContext);
+  const isAccountant = profile?.role?.name === Role.ACCOUNTANT;
+  const isWarehouseManager = profile?.role?.name === Role.WAREHOUSE_MANAGER;
 
   const [page, setPage] = useState(1);
   const limit = 5;
@@ -50,10 +57,18 @@ const Inventories = () => {
     useState(false);
 
   const handleOpenModalCreate = () => {
+    if (isWarehouseManager) {
+      toast.error("Bạn không có quyền thêm mới sản phẩm");
+      return;
+    }
     setOpenCreateModal(true);
   };
 
   const handleOpenModalAdjustInventory = () => {
+    if (isAccountant) {
+      toast.error("Bạn không có quyền chỉnh sửa tồn kho");
+      return;
+    }
     setOpenModalAdjustInventory(true);
   };
 
