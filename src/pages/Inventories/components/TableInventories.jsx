@@ -27,6 +27,8 @@ import { getAll } from "../../../apis/categoryService";
 import { getAllUnit } from "../../../apis/unitService";
 import ModalDetailProduct from "./ModalDetailProduct";
 import { deleteProduct, getOneProduct } from "../../../apis/productService";
+import { AuthContext } from "../../../contexts/AuthProvider";
+import { Role } from "../../../constant/role";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -50,6 +52,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function TableInventories({ data, fetchData }) {
   const { toast } = React.useContext(ToastContext);
+  const { profile } = React.useContext(AuthContext);
+  const isWarehouseManager = profile?.role?.name === Role.WAREHOUSE_MANAGER;
+
   const [openModalUpdate, setOpenModalUpdate] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState(null);
   const [openProductDetail, setOpenProductDetail] = React.useState(false);
@@ -59,6 +64,10 @@ export default function TableInventories({ data, fetchData }) {
     React.useState(false);
 
   const handleOnClickUpdate = (product) => {
+    if (isWarehouseManager) {
+      toast.error("Bạn không có quyền sửa sản phẩm");
+      return;
+    }
     setSelectedProduct(product);
     setOpenModalUpdate(true);
   };
@@ -79,6 +88,10 @@ export default function TableInventories({ data, fetchData }) {
     }
   };
   const handleClickDelete = (category) => {
+    if (isWarehouseManager) {
+      toast.error("Bạn không có quyền xóa sản phẩm");
+      return;
+    }
     setSelectedProduct(category);
     setOpenConfirmModalDelete(true);
   };
