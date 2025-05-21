@@ -15,12 +15,15 @@ import { ToastContext } from "../../contexts/toastProvider";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
+import { SocketContext } from "../../contexts/SocketContext";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useContext(ToastContext);
   const { setProfile } = useContext(AuthContext);
+  const { connectSocket, fetchDataNotificationsUnseen } =
+    useContext(SocketContext);
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
   const navigate = useNavigate();
   const {
@@ -42,6 +45,8 @@ const LoginPage = () => {
       const res = await login(dataSubmit);
       const { data } = res.data;
       localStorage.setItem("accessToken", data.accessToken);
+      connectSocket(localStorage.getItem("accessToken"));
+      await fetchDataNotificationsUnseen();
 
       const profileRes = await getProfile();
       setProfile(profileRes.data.data);
