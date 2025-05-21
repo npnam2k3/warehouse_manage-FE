@@ -25,6 +25,7 @@ import SupplierDebt from "./pages/SupplierDebt/SupplierDebt";
 import CustomerDebt from "./pages/CustomerDebt/CustomerDebt";
 import StatisticReport from "./pages/StatisticReport/StatisticReport";
 import { Role } from "./constant/role";
+import { SocketProvider } from "./contexts/SocketContext";
 
 function App() {
   const theme = createTheme({
@@ -38,75 +39,79 @@ function App() {
     <ThemeProvider theme={theme}>
       <ToastProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <Routes>
-              {/*public route */}
-              <Route path="login" element={<LoginPage />} />
-              <Route path="forgotPassword" element={<ForgotPassword />} />
-              <Route
-                path="resetPassword/:token"
-                element={<ResetPasswordPage />}
-              />
+          <SocketProvider>
+            <BrowserRouter>
+              <Routes>
+                {/*public route */}
+                <Route path="login" element={<LoginPage />} />
+                <Route path="forgotPassword" element={<ForgotPassword />} />
+                <Route
+                  path="resetPassword/:token"
+                  element={<ResetPasswordPage />}
+                />
 
-              {/* private route */}
-              <Route element={<RequireAuth />}>
-                <Route path="/" element={<MainLayout />}>
-                  {/* role admin */}
-                  <Route element={<PrivateRoute allowedRoles={[Role.ADMIN]} />}>
-                    <Route path="users" element={<UserPage />} />
-                  </Route>
-
-                  {/* role accountant + admin */}
-                  <Route
-                    element={
-                      <PrivateRoute
-                        allowedRoles={[Role.ADMIN, Role.ACCOUNTANT]}
-                      />
-                    }
-                  >
-                    <Route path="setup" element={<SetupPage />} />
-                    <Route path="customers" element={<CustomersPage />} />
-                    <Route path="suppliers" element={<SuppliersPage />} />
-                    <Route path="import-order" element={<ImportOrders />} />
-                    <Route path="export-order" element={<ExportOrders />} />
-
-                    <Route path="supplier-debt" element={<SupplierDebt />} />
-                    <Route path="customer-debt" element={<CustomerDebt />} />
+                {/* private route */}
+                <Route element={<RequireAuth />}>
+                  <Route path="/" element={<MainLayout />}>
+                    {/* role admin */}
                     <Route
-                      path="statistic-report"
-                      element={<StatisticReport />}
-                    />
+                      element={<PrivateRoute allowedRoles={[Role.ADMIN]} />}
+                    >
+                      <Route path="users" element={<UserPage />} />
+                    </Route>
 
-                    <Route path="categories" element={<CategoriesPage />} />
-                  </Route>
+                    {/* role accountant + admin */}
+                    <Route
+                      element={
+                        <PrivateRoute
+                          allowedRoles={[Role.ADMIN, Role.ACCOUNTANT]}
+                        />
+                      }
+                    >
+                      <Route path="setup" element={<SetupPage />} />
+                      <Route path="customers" element={<CustomersPage />} />
+                      <Route path="suppliers" element={<SuppliersPage />} />
+                      <Route path="import-order" element={<ImportOrders />} />
+                      <Route path="export-order" element={<ExportOrders />} />
 
-                  {/* role admin + accountant + warehouse_manager */}
-                  <Route
-                    element={
-                      <PrivateRoute
-                        allowedRoles={[
-                          Role.ADMIN,
-                          Role.ACCOUNTANT,
-                          Role.WAREHOUSE_MANAGER,
-                        ]}
+                      <Route path="supplier-debt" element={<SupplierDebt />} />
+                      <Route path="customer-debt" element={<CustomerDebt />} />
+                      <Route
+                        path="statistic-report"
+                        element={<StatisticReport />}
                       />
-                    }
-                  >
-                    <Route path="inventories" element={<Inventories />} />
-                  </Route>
 
-                  {/* route personal */}
-                  <Route index element={<Dashboard />} />
-                  <Route path="unauthorized" element={<ForbiddenPage />} />
-                  <Route path="profile" element={<ProfilePage />} />
-                  <Route
-                    path="changePassword"
-                    element={<ChangePasswordPage />}
-                  />
+                      <Route path="categories" element={<CategoriesPage />} />
+                    </Route>
+
+                    {/* role admin + accountant + warehouse_manager */}
+                    <Route
+                      element={
+                        <PrivateRoute
+                          allowedRoles={[
+                            Role.ADMIN,
+                            Role.ACCOUNTANT,
+                            Role.WAREHOUSE_MANAGER,
+                          ]}
+                        />
+                      }
+                    >
+                      <Route path="inventories" element={<Inventories />} />
+                    </Route>
+
+                    {/* route personal */}
+                    <Route index element={<Dashboard />} />
+                    <Route path="unauthorized" element={<ForbiddenPage />} />
+                    <Route path="profile" element={<ProfilePage />} />
+                    <Route
+                      path="changePassword"
+                      element={<ChangePasswordPage />}
+                    />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
-          </BrowserRouter>
+              </Routes>
+            </BrowserRouter>
+          </SocketProvider>
         </AuthProvider>
       </ToastProvider>
     </ThemeProvider>
