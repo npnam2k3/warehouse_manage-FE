@@ -175,6 +175,7 @@ const Inventories = () => {
       };
     });
   };
+
   return (
     <Box sx={{ bgcolor: "#F0F1FA", minHeight: "100vh", p: 3 }}>
       {/* title and button add */}

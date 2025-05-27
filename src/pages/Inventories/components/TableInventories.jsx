@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import HistoryIcon from "@mui/icons-material/History";
 import {
   Box,
   Button,
@@ -29,6 +30,7 @@ import ModalDetailProduct from "./ModalDetailProduct";
 import { deleteProduct, getOneProduct } from "../../../apis/productService";
 import { AuthContext } from "../../../contexts/AuthProvider";
 import { Role } from "../../../constant/role";
+import ModalHistoryOfProduct from "./ModalHistoryOfProduct";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -61,6 +63,8 @@ export default function TableInventories({ data, fetchData }) {
   const [categories, setCategories] = React.useState([]);
   const [units, setUnits] = React.useState([]);
   const [openConfirmModalDelete, setOpenConfirmModalDelete] =
+    React.useState(false);
+  const [openModalHistoryOfProduct, setOpenModalHistoryOfProduct] =
     React.useState(false);
 
   const handleOnClickUpdate = (product) => {
@@ -95,6 +99,12 @@ export default function TableInventories({ data, fetchData }) {
     setSelectedProduct(category);
     setOpenConfirmModalDelete(true);
   };
+
+  const handleClickHistoryOfProduct = (product) => {
+    setSelectedProduct(product);
+    setOpenModalHistoryOfProduct(true);
+  };
+
   const fetchDataCategories = async () => {
     try {
       const res = await getAll();
@@ -229,6 +239,25 @@ export default function TableInventories({ data, fetchData }) {
                     <DeleteIcon sx={{ fontSize: "20px" }} />
                   </Box>
                 </Tooltip>
+
+                <Tooltip title="Lịch sử nhập - xuất" placement="top-start">
+                  <Box
+                    component={"span"}
+                    sx={{
+                      bgcolor: "#B5FCCD",
+                      color: "#328E6E",
+                      borderRadius: "5px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      p: "4px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleClickHistoryOfProduct(row)}
+                  >
+                    <HistoryIcon sx={{ fontSize: "20px" }} />
+                  </Box>
+                </Tooltip>
               </StyledTableCell>
             </StyledTableRow>
           ))}
@@ -251,6 +280,15 @@ export default function TableInventories({ data, fetchData }) {
         setOpen={setOpenProductDetail}
         product={selectedProduct}
       />
+
+      {/* modal history import - export of product */}
+      {openModalHistoryOfProduct && (
+        <ModalHistoryOfProduct
+          open={openModalHistoryOfProduct}
+          setOpen={setOpenModalHistoryOfProduct}
+          product={selectedProduct}
+        />
+      )}
 
       {/* confirm modal delete */}
       <Dialog

@@ -126,7 +126,7 @@ export default function TableOrdersUpcomingPayment({ data }) {
                 {TYPE_ORDER[row.type_order]}
               </StyledTableCell>
               <StyledTableCell align="center">
-                {row.payment_due_date}
+                {formattedDateTime(row.payment_due_date)}
               </StyledTableCell>
             </StyledTableRow>
           ))}

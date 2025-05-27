@@ -34,3 +34,9 @@ export const cancelExportOrder = async (body) => {
 export const confirmExportOrder = async (id) => {
   return axiosClient.put(`/export-order/confirm-export-order/${id}`);
 };
+
+export const getHistorySellOfProduct = ({ limit, page, productId }) => {
+  return axiosClient.get(
+    `/export-order/historySellOfProduct/${productId}?limit=${limit}&page=${page}`
+  );
+};
