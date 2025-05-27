@@ -70,6 +70,10 @@ const ModalAdjustInventory = ({
       toast.error("Số lượng mới không được nhỏ hơn 0");
       return;
     }
+    if (Number(newQuantity) > 10000) {
+      toast.error("Số lượng mới quá lớn (giới hạn 10000). Hãy nhập lại");
+      return;
+    }
     setNewQuantity(newQuantity);
   };
 
