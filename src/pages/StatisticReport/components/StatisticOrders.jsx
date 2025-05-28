@@ -18,6 +18,7 @@ import TableOrdersUpcomingPayment from "./TableOrdersUpcomingPayment";
 import "dayjs/locale/vi";
 import {
   getNumOrdersMonthly,
+  getOrderOverdue,
   getOrdersInMonth,
   getOrdersUpcomingPayment,
 } from "../../../apis/statisticReportService";
@@ -26,6 +27,7 @@ import { formattedDateTime } from "../../../utils/handleDateTime";
 import { TYPE_ORDER } from "../../../constant/order";
 import { formatCurrencyForExportExcel } from "../../../utils/formatMoney";
 import exportToExcel from "../../../utils/exportDataExcel";
+import TableOrdersOverdue from "./TableOrdersOverdue";
 
 const StatisticOrders = () => {
   const { toast } = useContext(ToastContext);
@@ -37,6 +39,7 @@ const StatisticOrders = () => {
 
   const [numOrdersMonthly, setNumOrdersMonthly] = useState([]);
   const [ordersUpcomingPayment, setOrdersUpcomingPayment] = useState([]);
+  const [orderOverdue, setOrdersOverdue] = useState([]);
 
   const handleClickFilterNumOrders = () => {
     fetchDataNumOrdersMonthly();
@@ -110,9 +113,19 @@ const StatisticOrders = () => {
     }
   };
 
+  const fetchDataOrdersOverdue = async () => {
+    try {
+      const res = await getOrderOverdue();
+      setOrdersOverdue(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchDataNumOrdersMonthly();
     fetchDataOrdersUpcomingPayment();
+    fetchDataOrdersOverdue();
   }, []);
   return (
     <Box sx={{ mt: 2 }}>
@@ -278,6 +291,15 @@ const StatisticOrders = () => {
         </Box>
         <Box>
           <TableOrdersUpcomingPayment data={ordersUpcomingPayment} />
+        </Box>
+        <Box sx={{ marginTop: "80px" }}>
+          <Typography
+            variant="h6"
+            sx={{ mb: "20px", textAlign: "center", fontSize: "22px" }}
+          >
+            Đơn đã quá hạn thanh toán
+          </Typography>
+          <TableOrdersOverdue data={orderOverdue} />
         </Box>
       </Box>
       <Box mt={4}>
