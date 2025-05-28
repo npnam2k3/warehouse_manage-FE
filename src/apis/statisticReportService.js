@@ -21,6 +21,10 @@ export const getOrdersUpcomingPayment = (num_date) => {
   );
 };
 
+export const getOrderOverdue = () => {
+  return axiosClient.get(`${path}/orders-overdue`);
+};
+
 export const getOrdersInMonth = ({ month, year }) => {
   return axiosClient.get(`${path}/orders-in-month?month=${month}&year=${year}`);
 };
