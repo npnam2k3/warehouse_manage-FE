@@ -12,7 +12,7 @@ import ListOrdersRecent from "./components/ListOrdersRecent";
 
 const Dashboard = () => {
   const [baseInfo, setBaseInfo] = useState(null);
-  const [recentOrders, setRecentOrders] = useState([]);
+  const [recentOrders, setRecentOrders] = useState({});
   const [infoInventory, setInfoInventory] = useState(null);
 
   const fetchDataBaseInfo = async () => {
@@ -109,31 +109,31 @@ const Dashboard = () => {
         </Grid>
       </Box>
 
-      {recentOrders?.importOrdersRecent?.length > 0 &&
-        recentOrders?.exportOrdersRecent?.length > 0 && (
-          <Box
-            sx={{
-              mt: "40px",
-              bgcolor: "#fff",
-              p: 1,
-              borderRadius: 2,
-              boxShadow: 2,
-            }}
-          >
-            {recentOrders?.importOrdersRecent?.length > 0 && (
-              <ListOrdersRecent
-                isListImportOrder={true}
-                listOrders={recentOrders?.importOrdersRecent}
-              />
-            )}
-            {recentOrders?.exportOrdersRecent?.length > 0 && (
-              <ListOrdersRecent
-                isListImportOrder={false}
-                listOrders={recentOrders?.exportOrdersRecent}
-              />
-            )}
-          </Box>
-        )}
+      {(recentOrders?.importOrdersRecent?.length > 0 ||
+        recentOrders?.exportOrdersRecent?.length > 0) && (
+        <Box
+          sx={{
+            mt: "40px",
+            bgcolor: "#fff",
+            p: 1,
+            borderRadius: 2,
+            boxShadow: 2,
+          }}
+        >
+          {recentOrders?.importOrdersRecent?.length > 0 && (
+            <ListOrdersRecent
+              isListImportOrder={true}
+              listOrders={recentOrders?.importOrdersRecent}
+            />
+          )}
+          {recentOrders?.exportOrdersRecent?.length > 0 && (
+            <ListOrdersRecent
+              isListImportOrder={false}
+              listOrders={recentOrders?.exportOrdersRecent}
+            />
+          )}
+        </Box>
+      )}
       <Box
         sx={{
           mt: "40px",
