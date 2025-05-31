@@ -17,7 +17,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { formatCurrency } from "../../utils/formatMoney";
 import { Close } from "@mui/icons-material";
 import {
@@ -39,6 +39,7 @@ const ModalPaymentMultipleOrder = ({
   const { toast } = useContext(ToastContext);
   const [paymentMethod, setPaymentMethod] = useState("");
   const [selectedOrders, setSelectedOrders] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
   const handleClose = () => {
     setOpen(false);
   };
@@ -162,8 +163,17 @@ const ModalPaymentMultipleOrder = ({
   };
 
   const calcTotalAmount = () => {
-    return selectedOrders.reduce((sum, curr) => sum + curr.amount, 0);
+    const sum = selectedOrders.reduce((sum, curr) => {
+      // Use 0 if amount is undefined or not a number
+      return sum + (Number(curr.amount) || 0);
+    }, 0);
+    setTotalAmount(sum);
   };
+
+  // Calculate total amount whenever selectedOrders changes
+  useEffect(() => {
+    calcTotalAmount();
+  }, [selectedOrders]);
   return (
     <Dialog open={open} fullScreen onClose={handleClose} maxWidth="md">
       <DialogTitle>
@@ -318,7 +328,7 @@ const ModalPaymentMultipleOrder = ({
 
             <Typography>
               <strong>Tổng thanh toán:</strong>{" "}
-              <strong>{formatCurrency(calcTotalAmount())}</strong>
+              <strong>{formatCurrency(totalAmount)}</strong>
             </Typography>
 
             <Button
