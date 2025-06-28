@@ -75,8 +75,8 @@ export default function TableInventories({ data, fetchData }) {
     setSelectedProduct(product);
     setOpenModalUpdate(true);
   };
-  const handleClickDetailProduct = (product) => {
-    fetchDateGetOneProduct(product.id);
+  const handleClickDetailProduct = async (product) => {
+    await fetchDateGetOneProduct(product.id);
     setOpenProductDetail(true);
   };
 

@@ -25,7 +25,7 @@ const CategoryDetail = ({ open, onClose, category, products }) => {
     {
       field: "name",
       headerName: "Tên sản phẩm",
-      width: 200,
+      width: 400,
       resizable: false,
       align: "center",
       headerAlign: "center",
@@ -48,23 +48,23 @@ const CategoryDetail = ({ open, onClose, category, products }) => {
       headerAlign: "center",
       valueFormatter: (params) => `${params.toLocaleString?.() ?? ""} ₫`,
     },
-    {
-      field: "actions",
-      headerName: "Chi tiết",
-      width: 100,
-      align: "center",
-      headerAlign: "center",
-      renderCell: (params) => (
-        <Tooltip title="Xem chi tiết">
-          <IconButton
-            // onClick={() => handleViewDetail(params.row)}
-            sx={{ color: "#7AE2CF" }}
-          >
-            <VisibilityIcon />
-          </IconButton>
-        </Tooltip>
-      ),
-    },
+    // {
+    //   field: "actions",
+    //   headerName: "Chi tiết",
+    //   width: 100,
+    //   align: "center",
+    //   headerAlign: "center",
+    //   renderCell: (params) => (
+    //     <Tooltip title="Xem chi tiết">
+    //       <IconButton
+    //         // onClick={() => handleViewDetail(params.row)}
+    //         sx={{ color: "#7AE2CF" }}
+    //       >
+    //         <VisibilityIcon />
+    //       </IconButton>
+    //     </Tooltip>
+    //   ),
+    // },
   ];
 
   return (

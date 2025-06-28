@@ -56,7 +56,7 @@ export default function StatisticCommon() {
   const handleClickBtnExportExcel = () => {
     exportToExcel({
       data: dataForExcel,
-      fileName: "Báo cáo doanh thu - chi phí - lợi nhuận",
+      fileName: "Báo cáo doanh thu - chi phí",
     });
   };
 
@@ -102,7 +102,7 @@ export default function StatisticCommon() {
       return {
         name: `Tháng ${item.month}`,
         revenue: Number(item.total_revenue),
-        profit: Number(item.profit),
+        // profit: Number(item.profit),
         importCost: Number(item.total_cost),
       };
     });
@@ -114,7 +114,7 @@ export default function StatisticCommon() {
         Tháng: item.month,
         "Doanh thu": formatCurrencyForExportExcel(Number(item.total_revenue)),
         "Chi phí": formatCurrencyForExportExcel(Number(item.total_cost)),
-        "Lợi nhuận": formatCurrencyForExportExcel(Number(item.profit)),
+        // "Lợi nhuận": formatCurrencyForExportExcel(Number(item.profit)),
         "Số đơn nhập": Number(item.num_import_orders),
         "Số đơn xuất": Number(item.num_export_orders),
         "Số đơn nhập bị hủy": Number(item.num_import_orders_canceled),
@@ -339,7 +339,7 @@ export default function StatisticCommon() {
                     />
                   </Typography>
                 </Grid>
-                <Grid
+                {/* <Grid
                   item
                   xs={4}
                   sx={{
@@ -364,7 +364,7 @@ export default function StatisticCommon() {
                       suffix=" đ"
                     />
                   </Typography>
-                </Grid>
+                </Grid> */}
               </Grid>
             </CardContent>
           </Card>
@@ -378,8 +378,7 @@ export default function StatisticCommon() {
           gutterBottom
           sx={{ mb: "10px", textAlign: "center" }}
         >
-          Biểu đồ so sánh doanh thu - chi phí nhập hàng - lợi nhuận các tháng
-          trong năm
+          Biểu đồ so sánh doanh thu - chi phí nhập hàng các tháng trong năm
         </Typography>
         <Typography
           variant="p"
@@ -479,7 +478,7 @@ export default function StatisticCommon() {
               />
               <Bar dataKey="revenue" fill="#8884d8" name="Doanh thu" />
               <Bar dataKey="importCost" fill="#82ca9d" name="Chi phí nhập" />
-              <Bar dataKey="profit" fill="#ff7300" name="Lợi nhuận" />
+              {/* <Bar dataKey="profit" fill="#ff7300" name="Lợi nhuận" /> */}
             </BarChart>
           </ResponsiveContainer>
         </Box>

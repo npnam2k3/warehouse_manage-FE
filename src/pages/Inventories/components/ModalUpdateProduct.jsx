@@ -127,9 +127,8 @@ const ModalUpdateProduct = ({
     formData.append("sell_price", dataSubmit.sell_price);
     formData.append("categoryId", dataSubmit.category);
     formData.append("unitId", dataSubmit.unit);
-    if (dataSubmit.description) {
-      formData.append("description", dataSubmit.description);
-    }
+    formData.append("description", dataSubmit.description);
+
     if (dataSubmit.image) {
       formData.append("file", dataSubmit.image);
     } else if (currentImageUrl) {

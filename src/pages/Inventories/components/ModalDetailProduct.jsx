@@ -44,8 +44,8 @@ export default function ModalDetailProduct({ open, setOpen, product }) {
           <Grid item xs={12} md={4}>
             <Box
               sx={{
-                width: "100%",
-                height: 300,
+                width: "400px",
+                height: "auto",
                 overflow: "hidden",
                 borderRadius: 2,
               }}
