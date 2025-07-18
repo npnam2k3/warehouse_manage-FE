@@ -55,6 +55,8 @@ const ModalPaymentMultipleOrder = ({
           ...prev,
           {
             order_id: order.id,
+            amount: order.amount_due,
+            payment_status: PaymentStatus.PAID,
           },
         ];
       }
@@ -76,11 +78,23 @@ const ModalPaymentMultipleOrder = ({
     );
   };
 
-  const handlePaymentTypeChange = (orderId, value) => {
+  const handlePaymentTypeChange = (orderId, value, selectedOrder) => {
     setSelectedOrders((prev) => {
-      return prev.map((item) =>
-        item.order_id === orderId ? { ...item, payment_status: value } : item
-      );
+      return prev.map((item) => {
+        if (item.order_id === orderId) {
+          // nếu chọn thanh toán 1 phần => cập nhật số tiền thanh toán = 0 để nhập lại
+          if (value === PaymentStatus.PARTIALLY_PAID) {
+            return { ...item, payment_status: value, amount: 0 };
+          }
+          return {
+            ...item,
+            payment_status: value,
+            amount: selectedOrder.amount_due,
+          };
+        } else {
+          return item;
+        }
+      });
     });
   };
   const handleSubmit = async () => {
@@ -261,7 +275,12 @@ const ModalPaymentMultipleOrder = ({
                               }
                               handleAmountChange(order.id, safeValue);
                             }}
-                            inputProps={{ min: 0, max: remaining }}
+                            inputProps={{
+                              min: 0,
+                              max: remaining,
+                              readOnly:
+                                selected.payment_status === PaymentStatus.PAID,
+                            }}
                             size="small"
                             sx={{ width: "160px" }}
                           />
@@ -275,7 +294,11 @@ const ModalPaymentMultipleOrder = ({
                             size="small"
                             sx={{ maxWidth: "240px", width: "240px" }}
                             onChange={(e) =>
-                              handlePaymentTypeChange(order.id, e.target.value)
+                              handlePaymentTypeChange(
+                                order.id,
+                                e.target.value,
+                                order
+                              )
                             }
                           >
                             <MenuItem value={PaymentStatus.PAID}>

@@ -100,9 +100,11 @@ export default function ModalDetailProduct({ open, setOpen, product }) {
                     Danh mục:
                   </Typography>
                 </Box>
-                <Typography>{product?.category?.name || "Chưa có"}</Typography>
+                <Typography>
+                  {`Tên danh mục: ${product?.category?.name}` || "Chưa có"}
+                </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {product?.category?.description || ""}
+                  {`Mô tả: ${product?.category?.description}` || ""}
                 </Typography>
               </CardContent>
             </Card>
@@ -123,8 +125,8 @@ export default function ModalDetailProduct({ open, setOpen, product }) {
                     {product?.suppliers?.map((s) => (
                       <ListItem key={s?.id} disablePadding>
                         <ListItemText
-                          primary={s?.name_company}
-                          secondary={s?.address}
+                          primary={`Tên nhà cung cấp: ${s?.name_company}`}
+                          secondary={`Địa chỉ: ${s?.address}`}
                         />
                       </ListItem>
                     ))}
